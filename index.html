@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel WhatsApp Bot Connector</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+        .container { text-align: center; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #128C7E; }
+        button { background-color: #25D366; color: white; cursor: pointer; border: none; padding: 12px 25px; font-size: 1.1em; border-radius: 5px; }
+        #status-area { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hotel Order Bot Connector</h1>
+        <div id="session-management">
+            <button id="create-session-btn">Start New Bot Session</button>
+        </div>
+        <div id="status-area">
+            <h3 id="status">Click the button to start.</h3>
+            <div id="qrcode"></div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const createSessionBtn = document.getElementById('create-session-btn');
+        const statusEl = document.getElementById('status');
+        const qrEl = document.getElementById('qrcode');
+        createSessionBtn.addEventListener('click', () => {
+            statusEl.textContent = 'Requesting a new session...'; createSessionBtn.style.display = 'none'; socket.emit('create-session');
+        });
+        socket.on('session-created', (sessionId) => {
+            statusEl.innerHTML = `Session <strong>${sessionId}</strong> created. Waiting for QR...`; socket.emit('join-session', sessionId);
+        });
+        socket.on('qr', (url) => { statusEl.textContent = 'Please scan the QR Code below.'; qrEl.innerHTML = `<img src="${url}" alt="QR Code">`; });
+        socket.on('status', (message) => { if (message.includes('Connected')) { qrEl.innerHTML = ''; } statusEl.innerHTML = `<strong>${message}</strong>`; });
+    </script>
+</body>
+</html>
