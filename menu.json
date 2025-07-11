@@ -1,0 +1,17 @@
+{
+  "starters": {
+    "title": "Starters",
+    "items": [
+      { "id": "st1", "name": "Chicken Soup", "price": 350 },
+      { "id": "st2", "name": "Garlic Bread", "price": 400 }
+    ]
+  },
+  "main_course": {
+    "title": "Main Course",
+    "items": [
+      { "id": "mc1", "name": "Chicken Karahi", "price": 1200 },
+      { "id": "mc2", "name": "Beef Biryani", "price": 800 },
+      { "id": "mc3", "name": "Mutton Handi", "price": 1800 }
+    ]
+  }
+}
